@@ -15,8 +15,8 @@ const TextureFactory = {
     // The requested scenery, obstacles, enemies and shots are loaded from PNGs.
     // Keep only the player and pickups, which are outside this art replacement.
     this.makePlayers(scene);
-    this.makeEmerald(scene);
-    this.makeLifeCrystal(scene);
+    //this.makeEmerald(scene);
+    //this.makeLifeCrystal(scene);
   },
 
   /* 远景云层：480 x 260，白-灰系（可染色） */
