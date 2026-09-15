@@ -19,7 +19,7 @@ const ArtAssets = {
       add('tex_ground_' + id, 'material_' + this.materials[id][1]);
     }
     for (const name of ['bee','bee_1','bat','bat_1','phantom','phantom_1','glow','glow_1',
-      'ghast','ghast_charge','ghast_fire','enemy','stone','lava','fireball','bullet']) add('tex_' + name, name);
+      'ghast','ghast_charge','ghast_fire','enemy','stone','lava','fireball','bullet','emerald','life']) add('tex_' + name, name);
     // Legacy menu keys now resolve to the new art as well.
     add('tex_clouds', 'background_plain');
     add('tex_ground', 'material_grass');
@@ -28,6 +28,8 @@ const ArtAssets = {
     add('tex_vine', 'vine_plain');
     add('tex_oak_end', 'material_oak_end');
     add('tex_magma_block', 'wall_magma');
+    add('tex_emerald', 'emerald');
+    add('tex_life', 'life');
     return list;
   },
   biomeKey(kind, biome) { return 'tex_' + kind + '_' + (biome ? biome.id : 'plain'); },
