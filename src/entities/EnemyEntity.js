@@ -4,7 +4,8 @@
 
 class EnemyEntity extends Entity {
   constructor(scene, x, y, opts = {}) {
-    super(scene, 'enemy', x, y, 'tex_enemy', 32, 24);
+    // 1.8x visual size and collision box make the helicopter easier to dash through.
+    super(scene, 'enemy', x, y, 'tex_enemy', 57.6, 43.2);
 
     this.baseY = y;
     this.phase = Math.random() * Math.PI * 2;

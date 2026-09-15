@@ -3,12 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>像素飞行 · Pixel Glider</title>
+<title>像素飘流 · Pixel Glider</title>
 <link rel="icon" href="data:," />
-<link rel="stylesheet" href="src/style.css?v=audio1" />
+<link rel="stylesheet" href="src/style.css?v=tutorial1" />
 </head>
 <body>
 <div id="game-root"></div>
+<button id="tutorial-button" class="tutorial-button" type="button" aria-haspopup="dialog" hidden>新手教程</button>
+<dialog id="tutorial-dialog" aria-labelledby="tutorial-title">
+  <section class="tutorial-panel">
+    <p class="tutorial-eyebrow">第一次飞行</p>
+    <h2 id="tutorial-title">三步学会像素飘流</h2>
+    <img src="assets/tutorial.svg" alt="点击或触摸上升，松开下落，按空格冲刺。冲刺能撞碎绿色藤蔓和敌人，但石墙与浮岛不可撞碎。">
+    <button id="tutorial-close" type="button">明白了，返回主界面</button>
+  </section>
+</dialog>
 <section id="menu-audio" aria-label="音量调整" hidden>
   <label for="music-volume">背景音乐 <output id="music-level" for="music-volume">100%</output></label>
   <input id="music-volume" type="range" min="0" max="100" step="1" value="100">
@@ -86,8 +95,9 @@
 <!-- [I][J][K] 场景 —— 依赖 constants / characters / biomes / 系统层 -->
 <script src="src/systems/AudioController.js?v=audio1"></script>
 <script src="src/ui/SettingsUI.js?v=audio2"></script>
+<script src="src/ui/TutorialUI.js?v=tutorial1"></script>
 <script src="src/scenes/BootScene.js?v=flight1"></script>
-<script src="src/scenes/MenuScene.js?v=flight1"></script>
+<script src="src/scenes/MenuScene.js?v=tutorial1"></script>
 <script src="src/scenes/CharacterSelectScene.js?v=flight1"></script>
 <script src="src/scenes/GameScene.js?v=flight1"></script>
 <script src="src/scenes/GameOverScene.js"></script>

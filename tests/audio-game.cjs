@@ -103,27 +103,28 @@ test('Audio file mapping uses every requested supplied file and supports a no-We
 });
 
 function gameFixture() {
-  const sounds=[];
+  const sounds=[], shakes=[];
   class EnemyEntity {}
   const context=vm.createContext({Phaser:{Scene:class{}},EnemyEntity,GROUND_Y:476,
     ArtAssets:{playerScale:0.5},TUNING:{dash:{duration:0.3,cooldown:0.5},
-      health:{invincibleTime:1},score:{destroyPoints:10,emeraldPoints:20}}});
+      health:{invincibleTime:1,maxStorage:6},score:{destroyPoints:10,emeraldPoints:20}}});
   const Game=load(context,'src/scenes/GameScene.js','GameScene');
   const game=new Game();
-  Object.assign(game,{state:'playing',health:3,invincible:0,score:0,dashTimer:0.1,
+  Object.assign(game,{state:'playing',health:3,maxHealth:3,invincible:0,score:0,dashTimer:0.1,
     game:{audioController:{playSfx:key=>sounds.push(key)}},playerSprite:{},charCfg:{dashCdMul:1},
     charKey:'blue',playerX:220,playerY:200,
     add:{image(){return {setScale(){return this;},setTint(){return this;},setAlpha(){return this;},
       setDepth(){return this;},destroy(){}};}},
-    tweens:{add(){}},time:{delayedCall(){}},cameras:{main:{shake(){},flash(){}}},
+    tweens:{add(){}},time:{delayedCall(){}},cameras:{main:{shake(...args){shakes.push(args);},flash(){}}},
     updateHealthUI(){},spawnFloatText(){},spawnBurst(){}});
-  return {game,sounds,EnemyEntity};
+  return {game,sounds,shakes,EnemyEntity};
 }
 
-test('A successful dash plays its supplied sound once; cooldown suppresses repeats',()=>{
-  const {game,sounds}=gameFixture(); game.dashCooldown=0;
+test('A successful dash plays its supplied sound once without camera shake; cooldown suppresses repeats',()=>{
+  const {game,sounds,shakes}=gameFixture(); game.dashCooldown=0;
   game.tryDash(); game.tryDash();
   assert.deepEqual(sounds,['dash']); assert.equal(game.dashTimer,0.3);
+  assert.deepEqual(shakes,[]);
 });
 
 test('Only a helicopter destroyed during dash gets man.mp3; other enemies and obstacles are silent',()=>{
@@ -146,6 +147,30 @@ test('Invincibility suppresses repeated hurt sounds; failure plays once and emer
   assert.deepEqual(sounds,['hurt','hurt','fail']);
   const other=gameFixture(); other.game.collectEmerald({kill(){},x:2,y:3});
   assert.deepEqual(other.sounds,['collect']); assert.equal(other.game.score,20);
+});
+
+test('Life crystals never raise the health limit above six',()=>{
+  const {game}=gameFixture();
+  game.health=6; game.maxHealth=6;
+  game.collectLifeCrystal({kill(){},x:2,y:3});
+  assert.equal(game.health,6); assert.equal(game.maxHealth,6);
+});
+
+test('Tutorial is available only from the menu and pauses while its single guide image is open',()=>{
+  const nodes={};
+  for (const id of ['tutorial-button','tutorial-dialog','tutorial-close']) {
+    nodes['#'+id]={hidden:true,open:false,handlers:{},addEventListener(k,fn){this.handlers[k]=fn;},
+      focus(){this.focused=true;},showModal(){this.open=true;},close(){this.open=false;}};
+  }
+  const Tutorial=load(vm.createContext({document:{querySelector:id=>nodes[id]}}),'src/ui/TutorialUI.js','TutorialUI');
+  let active=true,paused=false;
+  const game={scene:{getScenes:()=>active?[{sys:{settings:{key:'MenuScene'}}}]:[],
+    pause(){active=false;paused=true;},isPaused(){return paused;},resume(){active=true;paused=false;}}};
+  const ui=new Tutorial(game,{playSfx(){}});
+  ui.showButton(true); assert.equal(nodes['#tutorial-button'].hidden,false);
+  ui.open(); assert.equal(ui.isOpen,true); assert.equal(paused,true);
+  ui.close(); assert.equal(active,true); assert.equal(nodes['#tutorial-button'].focused,true);
+  ui.showButton(false); assert.equal(nodes['#tutorial-button'].hidden,true);
 });
 
 test('Settings pauses and restores active play while preserving a previously paused scene',()=>{

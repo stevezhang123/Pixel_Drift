@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">像素飘流新手教程</title>
+  <desc id="desc">点击或触摸上升，松开下落，按空格冲刺；冲刺能撞碎绿色藤蔓和敌人，但不能撞碎石墙与浮岛。</desc>
+  <rect width="960" height="480" fill="#172c3f"/>
+  <rect x="12" y="12" width="936" height="456" fill="#87ceeb" stroke="#0f2130" stroke-width="12"/>
+  <path d="M18 356H942V462H18Z" fill="#6d4b2f"/>
+  <path d="M18 344H942V374H18Z" fill="#5d9f3a"/>
+
+  <g font-family="Arial, 'PingFang SC', sans-serif" text-anchor="middle">
+    <text x="480" y="60" font-size="34" font-weight="700" fill="#ffffff" stroke="#17334a" stroke-width="6" paint-order="stroke">飞行训练：看懂这张图就能出发</text>
+
+    <g transform="translate(48 92)">
+      <rect width="244" height="128" fill="#dff3ff" stroke="#17334a" stroke-width="6"/>
+      <path d="M52 80h18V62h18V44h18v18h18v18h-18v18H88V80H70v18H52Z" fill="#2672a3"/>
+      <path d="M135 91V43m0 0-16 18m16-18 16 18" fill="none" stroke="#2e7d32" stroke-width="9"/>
+      <text x="182" y="55" font-size="22" font-weight="700" fill="#17334a">点击 / 触摸</text>
+      <text x="182" y="88" font-size="25" font-weight="700" fill="#2e7d32">上升</text>
+    </g>
+
+    <g transform="translate(358 92)">
+      <rect width="244" height="128" fill="#dff3ff" stroke="#17334a" stroke-width="6"/>
+      <path d="M52 46h18v18h18v18h18V64h18V46h-18V28H88v18H70V28H52Z" fill="#2672a3"/>
+      <path d="M135 35v48m0 0-16-18m16 18 16-18" fill="none" stroke="#b04a32" stroke-width="9"/>
+      <text x="182" y="55" font-size="22" font-weight="700" fill="#17334a">松开</text>
+      <text x="182" y="88" font-size="25" font-weight="700" fill="#b04a32">下落</text>
+    </g>
+
+    <g transform="translate(668 92)">
+      <rect width="244" height="128" fill="#fff1a8" stroke="#7b5a16" stroke-width="6"/>
+      <rect x="27" y="34" width="102" height="54" fill="#263746" stroke="#0f2130" stroke-width="5"/>
+      <text x="78" y="69" font-size="19" font-weight="700" fill="#ffffff">空格</text>
+      <path d="M146 61h53m0 0-18-15m18 15-18 15" fill="none" stroke="#d78116" stroke-width="9"/>
+      <text x="174" y="108" font-size="25" font-weight="700" fill="#9b5410">冲刺</text>
+    </g>
+
+    <g transform="translate(64 249)">
+      <path d="M26 57h20V37h20V17h20v20h27v20H86v20H66V57H46v20H26Z" fill="#18a7cc" stroke="#17334a" stroke-width="5"/>
+      <path d="M127 47h78" stroke="#f2b632" stroke-width="12"/>
+      <path d="m201 29 34 18-34 18z" fill="#f2b632"/>
+
+      <g transform="translate(251 5)">
+        <path d="M18 0h16v22h14v22H34v26H18V48H4V26h14Z" fill="#4f9b39" stroke="#244b22" stroke-width="5"/>
+        <path d="m61 8 20 18-17 12 20 19-16 19" fill="none" stroke="#9be36a" stroke-width="7"/>
+        <rect x="105" y="20" width="70" height="37" fill="#7f9198" stroke="#263746" stroke-width="6"/>
+        <rect x="126" y="8" width="29" height="16" fill="#b9d2db" stroke="#263746" stroke-width="5"/>
+        <path d="M112 12h58M84 39h22m69 0h24" stroke="#263746" stroke-width="7"/>
+      </g>
+
+      <text x="318" y="108" font-size="27" font-weight="700" fill="#ffffff" stroke="#17334a" stroke-width="5" paint-order="stroke">冲刺能撞碎绿色藤蔓和敌人</text>
+    </g>
+
+    <g transform="translate(644 250)">
+      <rect x="0" y="0" width="252" height="105" fill="#4c5860" stroke="#26323a" stroke-width="7"/>
+      <path d="M8 31h47V8h50v43h46V15h54v39h39v44H8Z" fill="#7a858b"/>
+      <path d="M-24 14 8 47-24 80" fill="none" stroke="#cf493f" stroke-width="12"/>
+      <text x="126" y="138" font-size="23" font-weight="700" fill="#ffffff" stroke="#17334a" stroke-width="5" paint-order="stroke">石墙、浮岛不可撞碎</text>
+    </g>
+  </g>
+</svg>

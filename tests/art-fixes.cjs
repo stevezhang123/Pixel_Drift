@@ -13,10 +13,11 @@ function fixture() {
     Math:{Between:(a,b)=>Math.round((a+b)/2)},
   }});
   for (const file of ['src/config/constants.js','src/gfx/ArtAssets.js','src/entities/Entity.js',
-    'src/entities/BeeEntity.js','src/entities/BatEntity.js','src/entities/GlowEntity.js','src/entities/PhantomEntity.js','src/systems/SpawnManager.js']) {
+    'src/entities/EnemyEntity.js','src/entities/BeeEntity.js','src/entities/BatEntity.js',
+    'src/entities/GlowEntity.js','src/entities/PhantomEntity.js','src/systems/SpawnManager.js']) {
     vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
   }
-  const types = vm.runInContext('({BeeEntity,BatEntity,GlowEntity,PhantomEntity,SpawnManager,PLAYER_X,GROUND_Y,GAME_W})',context);
+  const types = vm.runInContext('({EnemyEntity,BeeEntity,BatEntity,GlowEntity,PhantomEntity,SpawnManager,PLAYER_X,GROUND_Y,GAME_W})',context);
   const scene = {entities:[],playerX:types.PLAYER_X,playerY:types.GROUND_Y*0.56,add:{
     sprite(){return {
       setDepth(){return this;},setDisplaySize(w,h){this.displayWidth=w;this.displayHeight=h;return this;},
@@ -27,9 +28,10 @@ function fixture() {
   return {...types,scene,random};
 }
 
-test('Resized mobs use the requested visual dimensions and collision bounds',()=>{
-  const {BeeEntity,GlowEntity,PhantomEntity,scene} = fixture();
-  for (const [Type,w,h] of [[BeeEntity,70,50],[GlowEntity,68,60],[PhantomEntity,84,52.8]]) {
+test('Resized mobs use the requested visual dimensions and matching collision bounds',()=>{
+  const {EnemyEntity,BeeEntity,BatEntity,GlowEntity,PhantomEntity,scene} = fixture();
+  for (const [Type,w,h] of [[EnemyEntity,57.6,43.2],[BatEntity,43.2,28.8],
+    [BeeEntity,70,50],[GlowEntity,68,60],[PhantomEntity,84,52.8]]) {
     const e=new Type(scene,400,200);
     assert.equal(e.sprite.displayWidth,w);
     assert.equal(e.sprite.displayHeight,h);

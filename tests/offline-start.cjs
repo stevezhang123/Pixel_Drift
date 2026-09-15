@@ -10,6 +10,10 @@ test('index uses only local startup resources and has a current offline asset bu
   assert.doesNotMatch(html, /<script[^>]+https?:\/\//);
   assert.match(html, /vendor\/phaser\.min\.js/);
   assert.match(html, /assets\/offline\.js/);
+  assert.match(html, /id="tutorial-button"[^>]*>新手教程</);
+  assert.match(html, /<img src="assets\/tutorial\.svg"/);
+  assert.match(html, /像素飘流/);
+  assert.ok(fs.existsSync(path.join(root, 'assets/tutorial.svg')));
   assert.ok(fs.statSync(path.join(root, 'vendor/phaser.min.js')).size > 1_000_000);
 
   const context = vm.createContext({window:{}});

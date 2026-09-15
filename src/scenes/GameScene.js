@@ -122,8 +122,6 @@ class GameScene extends Phaser.Scene {
     this.dashCooldown = d.cooldown * this.charCfg.dashCdMul;
     this.game.audioController.playSfx('dash');
 
-    this.cameras.main.shake(120, 0.006);
-
     for (let i = 0; i < 5; i++) {
       const ghost = this.add.image(this.playerX, this.playerY, `tex_player_${this.charKey}_0`)
         .setScale(1.6 * ArtAssets.playerScale).setTint(0x9fe8ff).setAlpha(0.55).setDepth(18);

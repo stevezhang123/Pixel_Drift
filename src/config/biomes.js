@@ -45,8 +45,8 @@ const BIOMES = [
     enemySlots: [{ type: 'bee', weight: 2 }, { type: 'bat', weight: 1 }],
     projectileSlots: [],
     enemyInterval: 4.5,
-    spawnIntervalMul: 1.00,
-    obstacleWeightBonus: 0.00,
+    spawnIntervalMul: 1.30,
+    obstacleWeightBonus: -0.10,
   }),
 
   // 2. 海边 —— 开阔，有熔岩抛射
@@ -63,8 +63,8 @@ const BIOMES = [
     projectileSlots: [],
     enemyInterval: 3.6,
     projectileInterval: 3.4,
-    spawnIntervalMul: 1.00,
-    obstacleWeightBonus: 0.02,
+    spawnIntervalMul: 1.20,
+    obstacleWeightBonus: -0.06,
   }),
 
   // 3. 森林 —— 藤蔓多，洞顶落石
@@ -81,8 +81,8 @@ const BIOMES = [
     projectileSlots: [{ type: 'stone', weight: 2 }],
     enemyInterval: 3.8,
     projectileInterval: 3.2,
-    spawnIntervalMul: 0.95,
-    obstacleWeightBonus: 0.04,
+    spawnIntervalMul: 1.10,
+    obstacleWeightBonus: -0.02,
   }),
 
   // 4. 洞穴 —— 落石为主，封闭环境

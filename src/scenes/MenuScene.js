@@ -10,7 +10,11 @@ class MenuScene extends Phaser.Scene {
   create() {
     this.game.audioController.setBiome('plain');
     this.game.settingsUI.showMenuAudio(true);
-    this.events.once('shutdown', () => this.game.settingsUI.showMenuAudio(false));
+    this.game.tutorialUI.showButton(true);
+    this.events.once('shutdown', () => {
+      this.game.settingsUI.showMenuAudio(false);
+      this.game.tutorialUI.showButton(false);
+    });
     const cx = GAME_W / 2;
     const cy = GAME_H / 2;
 
@@ -22,7 +26,7 @@ class MenuScene extends Phaser.Scene {
     this.bgManager.bgFar.setDepth(-2);
     this.bgManager.ground.setDepth(-1);
 
-    const title = makeText(this, cx, cy - 130, '像素飞行', {
+    const title = makeText(this, cx, cy - 130, '像素飘流', {
       fontFamily: '"Courier New", Consolas, monospace',
       fontSize: '76px', color: '#ffffff', fontStyle: 'bold',
       stroke: '#1b3a57', strokeThickness: 10,

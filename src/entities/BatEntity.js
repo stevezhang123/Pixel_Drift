@@ -4,7 +4,7 @@
 
 class BatEntity extends Entity {
   constructor(scene, x, y, opts = {}) {
-    super(scene, 'enemy', x, y, 'tex_bat', 24, 16);
+    super(scene, 'enemy', x, y, 'tex_bat', 43.2, 28.8);
 
     this.baseY = y;
     this.baseX = x;

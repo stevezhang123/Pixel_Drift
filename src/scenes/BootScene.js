@@ -17,6 +17,7 @@ class BootScene extends Phaser.Scene {
     ArtAssets.createAnimations(this);
     this.game.audioController = new AudioController();
     this.game.settingsUI = new SettingsUI(this.game, this.game.audioController);
+    this.game.tutorialUI = new TutorialUI(this.game, this.game.audioController);
     this.game.events.once('destroy', () => this.game.audioController.destroy());
     this.scene.start('MenuScene');
   }
