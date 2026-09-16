@@ -4,7 +4,7 @@
 
 class EmeraldEntity extends Entity {
   constructor(scene, x, y) {
-    super(scene, 'emerald', x, y, 'tex_emerald', 16, 16);
+    super(scene, 'emerald', x, y, 'tex_emerald', 30, 30);
     this.baseY = y;
     this.phase = Math.random() * Math.PI * 2;
     this.lethal = false;
@@ -16,7 +16,7 @@ class EmeraldEntity extends Entity {
     this.x -= scrollSpeed * dt;
 
     this.sprite.setPosition(this.x, this.y);
-    const s = 1 + Math.sin(this.phase) * 0.10;
+    const s = (1 + Math.sin(this.phase) * 0.10) * 1.5;
     this.sprite.setScale(s, s);
   }
 }

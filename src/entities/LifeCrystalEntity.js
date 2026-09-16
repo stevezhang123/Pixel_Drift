@@ -4,7 +4,7 @@
 
 class LifeCrystalEntity extends Entity {
   constructor(scene, x, y) {
-    super(scene, 'life', x, y, 'tex_life', 16, 16);
+    super(scene, 'life', x, y, 'tex_life', 30, 30);
     this.baseY = y;
     this.phase = Math.random() * Math.PI * 2;
     this.lethal = false;
@@ -16,7 +16,7 @@ class LifeCrystalEntity extends Entity {
     this.x -= scrollSpeed * dt;
 
     this.sprite.setPosition(this.x, this.y);
-    const s = 1 + Math.sin(this.phase) * 0.12;
+    const s = (1 + Math.sin(this.phase) * 0.12) * 1.5;
     this.sprite.setScale(s, s);
   }
 }

@@ -21,7 +21,6 @@ class GameScene extends Phaser.Scene {
     this.elapsed = 0;
     this.score = 0;
     this.health = TUNING.health.max;
-    this.maxHealth = TUNING.health.max;
     this.invincible = 0;
     this.windTime = 0;
 
@@ -343,16 +342,8 @@ class GameScene extends Phaser.Scene {
   collectLifeCrystal(e) {
     e.kill();
 
-    if (this.health < this.maxHealth) {
-      this.health++;
-      this.spawnFloatText(e.x, e.y, '+1 生命', '#ff9a9a');
-    } else if (this.maxHealth < TUNING.health.maxStorage) {
-      this.maxHealth++;
-      this.health++;
-      this.spawnFloatText(e.x, e.y, '生命上限 +1', '#ff9a9a');
-    } else {
-      this.spawnFloatText(e.x, e.y, '生命已满', '#ffd76a');
-    }
+    this.health++;
+    this.spawnFloatText(e.x, e.y, '+1 生命', '#ff9a9a');
 
     this.updateHealthUI();
     this.spawnBurst(e.x, e.y, 0xff4d4d);
@@ -536,14 +527,25 @@ class GameScene extends Phaser.Scene {
       stroke: '#12314a', strokeThickness: 4,
     }).setDepth(100);
 
-    this.heartIcons = [];
-    for (let i = 0; i < TUNING.health.maxStorage; i++) {
-      const r = this.add.rectangle(30 + i * 32, 96, 22, 22, 0xff4d4d)
-        .setStrokeStyle(3, 0x6d0f0f)
-        .setDepth(100);
-      this.heartIcons.push(r);
+    // 红心贴图 + 计数式生命值显示（❤ ×N）
+    if (!this.textures.exists('tex_heart')) {
+      const g = makeGfx(this);
+      const S = 32;
+      g.fillStyle(0xff4d4d, 1);
+      g.fillCircle(S * 0.30, S * 0.30, S * 0.30);
+      g.fillCircle(S * 0.70, S * 0.30, S * 0.30);
+      g.fillTriangle(S * 0.02, S * 0.42, S * 0.98, S * 0.42, S * 0.50, S * 0.98);
+      g.fillStyle(0xff8a8a, 1);
+      g.fillCircle(S * 0.24, S * 0.22, S * 0.10);
+      bake(g, 'tex_heart', S, S);
     }
-    this.updateHealthUI();
+
+    this.heartIcon = this.add.sprite(46, 96, 'tex_heart').setDepth(100);
+    this.heartText = makeText(this, 70, 96, '×' + this.health, {
+      fontFamily: '"Courier New", Consolas, monospace',
+      fontSize: '30px', color: '#ff6b6b', fontStyle: 'bold',
+      stroke: '#12314a', strokeThickness: 6,
+    }).setOrigin(0, 0.5).setDepth(101);
 
     const barW = 130, barX = GAME_W - 24 - barW, barY = 30;
 
@@ -561,13 +563,7 @@ class GameScene extends Phaser.Scene {
   }
 
   updateHealthUI() {
-    this.heartIcons.forEach((icon, i) => {
-      const active = i < this.maxHealth;
-      icon.setVisible(active);
-      if (!active) return;
-      icon.setFillStyle(i < this.health ? 0xff4d4d : 0x4a4a4a);
-      icon.setStrokeStyle(3, i < this.health ? 0x6d0f0f : 0x2a2a2a);
-    });
+    this.heartText.setText('×' + this.health);
   }
 
   updateUI() {

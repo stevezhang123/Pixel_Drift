@@ -19,8 +19,8 @@ const TUNING = {
   world: {
     baseScrollSpeed: 180,     // 基础滚动速度 px/s（前 accelStartTime 秒恒定）
     accelStartTime: 40,       // 开始加速的时间点（秒）。改成 120 即"2 分钟后加速"
-    accelPerSecond: 5,        // 加速阶段每秒增加的速度 px/s（加速度）
-    maxScrollSpeed: 480,      // 滚动速度上限 px/s
+    accelPerSecond:4,        // 加速阶段每秒增加的速度 px/s（加速度）
+    maxScrollSpeed: 420,      // 滚动速度上限 px/s
     bgFarFactor: 0.18,        // 远景云层视差系数
     bgNearFactor: 0.45,       // 近景山丘视差系数
   },
@@ -55,7 +55,7 @@ const TUNING = {
     obstacleWeightGrow: 0.005,// 每秒增长的概率
 
     enemyInterval: 3.2,       // ★ 敌人独立生成的基础间隔（秒），可被群系覆盖
-    projectileInterval: 3.0,  // ★ 抛射物独立生成的基础间隔（秒），可被群系覆盖
+    projectileInterval: 6.0,  // ★ 抛射物独立生成的基础间隔（秒），可被群系覆盖
   },
 
   /* ---------- 分数 ---------- */
@@ -67,8 +67,7 @@ const TUNING = {
 
   /* ---------- 生命 ---------- */
   health: {
-    max: 3,                   // 初始生命值 / 生命上限起点
-    maxStorage: 6,            // ★ 硬上限：任何情况下生命上限都不得超过 6
+    max: 3,                   // 初始生命值（无上限，可随生命水晶无限增长）
     invincibleTime: 1.5,      // 受伤后的无敌时间（秒）
   },
 
