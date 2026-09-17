@@ -121,7 +121,7 @@ function gameFixture() {
 }
 
 test('A successful dash plays its supplied sound once without camera shake; cooldown suppresses repeats',()=>{
-  const {game,sounds,shakes}=gameFixture(); game.dashCooldown=0;
+  const {game,sounds,shakes}=gameFixture(); game.dashCooldown=0; game.dashTimer=0;
   game.tryDash(); game.tryDash();
   assert.deepEqual(sounds,['dash']); assert.equal(game.dashTimer,0.3);
   assert.deepEqual(shakes,[]);

@@ -11,6 +11,27 @@ html, body {
 
 canvas { image-rendering: pixelated; }
 
+#mobile-controls[hidden] { display: none; }
+.mobile-controls-active #game-root {
+  display: block; height: calc(100dvh - 76px - env(safe-area-inset-bottom));
+}
+#mobile-controls {
+  position: fixed; bottom: 0; left: 0; width: 100%; height: calc(76px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; justify-content: center; z-index: 18;
+  background: #172c3f; border-top: 3px solid #36566e; box-sizing: border-box;
+  pointer-events: none; padding-bottom: env(safe-area-inset-bottom);
+}
+#mobile-dash {
+  pointer-events: auto; touch-action: none; user-select: none; width: 126px; min-height: 54px;
+  background: #2f6684; color: #f3fbff; border: 3px solid #8fd3ff;
+  box-shadow: inset 0 3px #579abb, 3px 3px 0 #0e2230;
+  font: bold 18px system-ui, sans-serif; cursor: pointer;
+}
+#mobile-dash span, #mobile-dash small { display: block; }
+#mobile-dash small { font-size: 11px; margin-top: 2px; color: #ffe066; }
+#mobile-dash:active { transform: translate(2px, 2px); box-shadow: inset 0 3px #579abb; }
+#mobile-dash:disabled { background: #344b5c; border-color: #617e90; box-shadow: inset 0 3px #455e6e; }
+
 #menu-audio {
   position: fixed; right: max(16px, env(safe-area-inset-right)); top: 18px;
   width: clamp(160px, 18vw, 220px); padding: 12px 16px; z-index: 15;

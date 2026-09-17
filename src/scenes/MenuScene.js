@@ -68,7 +68,9 @@ class MenuScene extends Phaser.Scene {
       window.close();
     }, { width: 260, height: 70, color: 0xb71c1c, fontSize: '30px' });
 
-    makeText(this, cx, GAME_H - 34, '空格 = 冲刺    鼠标/触摸 = 上升    P = 暂停', {
+    makeText(this, cx, GAME_H - 34, this.game.mobileControls.touchDevice
+      ? '触摸画面 = 上升    游戏底部按钮 = 冲刺'
+      : '空格 = 冲刺    鼠标/触摸 = 上升    P = 暂停', {
       fontFamily: '"Courier New", Consolas, monospace',
       fontSize: '16px', color: '#e8f6ff',
       stroke: '#1b3a57', strokeThickness: 4,

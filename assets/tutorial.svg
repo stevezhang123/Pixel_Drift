@@ -28,7 +28,7 @@
     <g transform="translate(668 92)">
       <rect width="244" height="128" fill="#fff1a8" stroke="#7b5a16" stroke-width="6"/>
       <rect x="27" y="34" width="102" height="54" fill="#263746" stroke="#0f2130" stroke-width="5"/>
-      <text x="78" y="69" font-size="19" font-weight="700" fill="#ffffff">空格</text>
+      <text x="78" y="69" font-size="14" font-weight="700" fill="#ffffff">空格 / 按钮</text>
       <path d="M146 61h53m0 0-18-15m18 15-18 15" fill="none" stroke="#d78116" stroke-width="9"/>
       <text x="174" y="108" font-size="25" font-weight="700" fill="#9b5410">冲刺</text>
     </g>
