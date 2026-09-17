@@ -35,6 +35,7 @@ class GameScene extends Phaser.Scene {
     /* ---- 冲刺 ---- */
     this.dashTimer = 0;
     this.dashCooldown = 0;
+    this.dashLockTimer = 0;
 
     /* ---- 实体容器 ---- */
     this.entities = [];
@@ -114,7 +115,7 @@ class GameScene extends Phaser.Scene {
   }
 
   tryDash() {
-    if (this.dashCooldown > 0) return;
+    if (this.dashCooldown > 0 || this.dashLockTimer > 0) return;
 
     const d = TUNING.dash;
     this.dashTimer = d.duration;
@@ -218,6 +219,7 @@ class GameScene extends Phaser.Scene {
     }
 
     /* --- 冲刺计时 --- */
+    this.updateDashLock(dt);
     if (this.dashTimer > 0)    this.dashTimer    -= dt;
     if (this.dashCooldown > 0) this.dashCooldown -= dt;
 
@@ -277,7 +279,9 @@ class GameScene extends Phaser.Scene {
         this.collectEmerald(e);
       } else if (e.kind === 'life') {
         this.collectLifeCrystal(e);
-      } else if (e.kind === 'fireball') {
+        } else if (e.kind === 'enemyshot') {
+          this.playerVsEnemyShot(e, dashing);
+        } else if (e.kind === 'fireball') {
         this.playerVsFireball(e, dashing);
       } else if (e.breakable || e.kind === 'enemy') {
         if (dashing) this.destroyEntity(e);
@@ -288,9 +292,27 @@ class GameScene extends Phaser.Scene {
     }
 
     this.checkReboundFireballs();
+    // A dash collision wins over a slime landing on the same frame.
+    for (const e of this.entities) if (!e.dead && e.afterPlayerCollisions) e.afterPlayerCollisions();
   }
 
-  /* 玩家碰上火球：冲刺 → 反弹飞向恶魂；否则 → 扣血 */
+  /* 粘液减益沿用游戏时间，暂停时不会消耗持续时间。 */
+  updateDashLock(dt) {
+    this.dashLockTimer = Math.max(0, (this.dashLockTimer || 0) - dt);
+  }
+
+  playerVsEnemyShot(e, dashing) {
+    if (dashing && e.breakable) { this.destroyEntity(e); return; }
+    e.kill();
+    if (this.state !== 'playing' || this.invincible > 0) return;
+    if (e.dashLockSeconds > 0) {
+      this.dashLockTimer = Math.max(this.dashLockTimer || 0, e.dashLockSeconds);
+      this.spawnFloatText(this.playerX, this.playerY-30, '粘液：禁冲刺 3秒', '#ead8a8');
+    }
+    this.damagePlayer();
+  }
+
+  /* 玩家碰上恶魂火球：冲刺 → 反弹飞向恶魂；否则 → 扣血 */
   playerVsFireball(e, dashing) {
     if (e.reversed) return; // 已反弹的火球不再伤害玩家
     if (dashing) {
@@ -350,7 +372,9 @@ class GameScene extends Phaser.Scene {
   }
 
   destroyEntity(e) {
+    if (e.dead) return;
     if (e instanceof EnemyEntity && this.dashTimer > 0) this.game.audioController.playSfx('helicopter');
+    if (this.dashTimer > 0 && e.onDashDestroyed) e.onDashDestroyed();
     e.kill();
     this.score += TUNING.score.destroyPoints;
     this.spawnFloatText(e.x, e.y, '+' + TUNING.score.destroyPoints, '#ffd76a');
@@ -555,7 +579,7 @@ class GameScene extends Phaser.Scene {
     this.dashBar = this.add.rectangle(barX + 2, barY, barW - 4, 10, 0x4fd1ff)
       .setOrigin(0, 0.5).setDepth(101);
 
-    makeText(this, barX + barW / 2, barY + 24, '冲刺 [空格]', {
+    this.dashLabel = makeText(this, barX + barW / 2, barY + 24, '冲刺 [空格]', {
       fontFamily: '"Courier New", Consolas, monospace',
       fontSize: '14px', color: '#dff3ff',
       stroke: '#12314a', strokeThickness: 4,
@@ -574,6 +598,10 @@ class GameScene extends Phaser.Scene {
     const ratio = ready ? 1 : 1 - (this.dashCooldown / (TUNING.dash.cooldown * this.charCfg.dashCdMul));
     this.dashBar.setScale(Phaser.Math.Clamp(ratio, 0, 1), 1);
     this.dashBar.setFillStyle(ready ? 0x4fd1ff : 0x2b6b8a);
+    if (this.dashLockTimer > 0) {
+      this.dashBar.setFillStyle(0xb4a17c);
+      this.dashLabel.setText('粘液禁冲刺 ' + this.dashLockTimer.toFixed(1) + '秒');
+    } else this.dashLabel.setText('冲刺 [空格]');
   }
 
   createPauseOverlay() {

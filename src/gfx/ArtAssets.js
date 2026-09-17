@@ -3,13 +3,16 @@
 // ImageGen scenery/enemies and team-supplied parrot PNGs.
 const ArtAssets = {
   playerScale: 0.8, // 1.6x the previous visual size; collision geometry is unchanged.
-  biomeIds: ['plain', 'beach', 'forest', 'cave', 'nether', 'basalt'],
+  biomeIds: ['plain', 'beach', 'forest', 'cave', 'nether', 'basalt', 'end', 'snow', 'blossom', 'wailing'],
   materials: {
     plain: ['dirt', 'grass'], beach: ['sandstone', 'sand'],
     forest: ['oak', 'moss'], cave: ['stone', 'stone'],
     nether: ['netherrack', 'nether_magma'], basalt: ['basalt', 'basalt_magma'],
+    end: ['endstone', 'endstone'], snow: ['snowstone', 'snow'],
+    blossom: ['endstone', 'pink_moss'], wailing: ['soapstone', 'wailing_grass'],
   },
-  animations: { tex_bee: 12, tex_bat: 10, tex_phantom: 7, tex_glow: 4 },
+  animations: { tex_bee: 12, tex_bat: 10, tex_phantom: 7, tex_glow: 4,
+    tex_helljelly: 4, tex_flowerslime: 6 },
   get images() {
     const list = [];
     const add = (key, file) => list.push({key, url: 'assets/art/' + file + '.png'});
@@ -18,6 +21,8 @@ const ArtAssets = {
     }
     add('tex_emerald', 'emerald');
     add('tex_life', 'life');
+    for (const name of ['shulker','shulker_open','shulker_fire','helljelly','helljelly_1',
+      'flowerslime','flowerslime_1','sticky','jellyfire','petal']) add('tex_'+name,name);
     for (const id of this.biomeIds) {
       for (const kind of ['background', 'vine', 'island']) add('tex_' + kind + '_' + id, kind + '_' + id);
       add('tex_wall_' + id, 'wall_' + id);

@@ -17,9 +17,9 @@ const TUNING = {
 
   /* ---------- 世界 / 卷轴滚动 ---------- */
   world: {
-    baseScrollSpeed: 180,     // 基础滚动速度 px/s（前 accelStartTime 秒恒定）
+    baseScrollSpeed:300,     // 基础滚动速度 px/s（前 accelStartTime 秒恒定）
     accelStartTime: 40,       // 开始加速的时间点（秒）。改成 120 即"2 分钟后加速"
-    accelPerSecond:4,        // 加速阶段每秒增加的速度 px/s（加速度）
+    accelPerSecond:2,        // 加速阶段每秒增加的速度 px/s（加速度）
     maxScrollSpeed: 420,      // 滚动速度上限 px/s
     bgFarFactor: 0.18,        // 远景云层视差系数
     bgNearFactor: 0.45,       // 近景山丘视差系数
@@ -39,7 +39,7 @@ const TUNING = {
 
   /* ---------- 冲刺 ---------- */
   dash: {
-    cooldown: 0.5,            // 冷却时间（秒）
+    cooldown: 0.3,            // 冷却时间（秒）
     duration: 0.32,           // 冲刺持续时间（秒）
     speedMultiplier: 2.6,     // 冲刺期间卷轴速度倍率
     forwardOffset: 46,        // 冲刺时飞行器向右位移（视觉反馈）
@@ -67,13 +67,13 @@ const TUNING = {
 
   /* ---------- 生命 ---------- */
   health: {
-    max: 3,                   // 初始生命值（无上限，可随生命水晶无限增长）
+    max: 5,                   // 初始生命值（无上限，可随生命水晶无限增长）
     invincibleTime: 1.5,      // 受伤后的无敌时间（秒）
   },
 
   /* ---------- 生物群系 ---------- */
   biome: {
-    duration: 30,             // 每个群系持续秒数
+    duration: 25,             // 每个群系持续秒数
     fadeOutTime: 320,         // 切换过场：淡出时长（毫秒）
     fadeInTime: 320,          // 切换过场：淡入时长（毫秒）
   },

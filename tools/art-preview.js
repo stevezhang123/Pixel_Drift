@@ -34,7 +34,9 @@ class ArtPreviewScene extends Phaser.Scene {
     this.bg.applyBiome(this.biome, true);
     this.bg.bgFar.tilePositionX = 0;
     document.querySelectorAll('#biomes button').forEach((b,i) => b.setAttribute('aria-pressed', String(i===index)));
-    const materials = ['土块 / 藤蔓 / 草覆岩石', '砂岩 / 沙石锥 / 砂岩浮岛', '橡木 / 藤蔓 / 苔石浮岛', '石头 / 缠根滴水石锥 / 洞穴岩石', '下界岩与岩浆块 / 下界岩石锥 / 下界岩浮岛', '玄武岩与岩浆块 / 玄武岩石锥 / 玄武岩浮岛'];
+    const materials = ['土块 / 藤蔓 / 草覆岩石', '砂岩 / 沙石锥 / 砂岩浮岛', '橡木 / 藤蔓 / 苔石浮岛', '石头 / 缠根滴水石锥 / 洞穴岩石', '下界岩与岩浆块 / 下界岩石锥 / 下界岩浮岛', '玄武岩与岩浆块 / 玄武岩石锥 / 玄武岩浮岛',
+      '末地石 / 缠紫根末地石锥 / 末地石浮岛', '覆雪岩石 / 冰锥 / 雪覆冰岩浮岛',
+      '末地石 / 垂花藤蔓 / 粉苔末地石浮岛', '皂石 / 缠紫根皂石锥 / 紫草皂石浮岛'];
     document.querySelector('#caption').textContent = this.biome.name + '：' + materials[index];
     this.entities.push(new WallEntity(this,90,true,166,66), new WallEntity(this,90,false,170,66),
       new VineEntity(this,250,148,40,296), new FloaterEntity(this,440,408,'tex_island',120,60),

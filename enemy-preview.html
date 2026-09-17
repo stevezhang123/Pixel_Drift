@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-CN"><meta charset="utf-8"><title>新敌人逻辑测试</title>
+<style>body{background:#152127;color:#eee;font:16px system-ui;max-width:1000px;margin:24px auto}button,a{padding:10px;margin:5px;color:#fff;background:#365947;border:1px solid #8a9e91;cursor:pointer}#preview{width:960px;max-width:100%;aspect-ratio:16/9}canvas{max-width:100%}#status{padding:12px;background:#263840}</style>
+<h1>新敌人逻辑测试</h1><p>沿用真实实体、碰撞和冲刺代码，自机固定位置便于观察。使用正式像素 PNG 与动画；本页测试操作不影响正式游戏。</p>
+<button id="shulker">四向潜影贝</button><button id="jelly">地狱水母</button><button id="slime">史莱姆落地</button><button id="left">史莱姆左边界</button><button id="sticky">粘液命中</button><button id="destroy">冲刺击毁当前水母／史莱姆</button><button id="dash">尝试冲刺</button>
+<p id="status" role="status">加载中</p><div id="preview"></div><p><a href="index.html">进入正式游戏</a></p>
+<script src="vendor/phaser.min.js"></script>
+<script src="assets/offline.js"></script>
+<script src="src/config/constants.js"></script>
+<script src="src/config/characters.js"></script>
+<script src="src/config/biomes.js"></script>
+<script src="src/utils/helpers.js?v=audio1"></script>
+<script src="src/gfx/RenderQuality.js"></script>
+<script src="src/gfx/TextureFactory.js?v=audio1"></script>
+<script src="src/gfx/ArtAssets.js?v=flight1"></script>
+<script src="src/entities/Entity.js"></script>
+<script src="src/entities/WallEntity.js?v=art2"></script>
+<script src="src/entities/FloaterEntity.js"></script>
+<script src="src/entities/VineEntity.js"></script>
+<script src="src/entities/EnemyEntity.js"></script>
+<script src="src/entities/ProjectileEntity.js"></script>
+<script src="src/entities/BeeEntity.js?v=art2"></script>
+<script src="src/entities/BatEntity.js"></script>
+<script src="src/entities/PhantomEntity.js?v=art3"></script>
+<script src="src/entities/GlowEntity.js?v=art2"></script>
+<script src="src/entities/FireballEntity.js"></script>
+<script src="src/entities/GhastEntity.js"></script>
+<script src="src/entities/NewEnemyEntities.js"></script>
+<script src="src/entities/EmeraldEntity.js"></script>
+<script src="src/entities/LifeCrystalEntity.js"></script>
+<script src="src/systems/BackgroundManager.js?v=art2"></script>
+<script src="src/systems/SpawnManager.js?v=art2"></script>
+<script src="src/systems/AudioController.js?v=audio1"></script>
+<script src="src/ui/SettingsUI.js?v=audio2"></script>
+<script src="src/ui/TutorialUI.js?v=tutorial1"></script>
+<script src="src/scenes/BootScene.js?v=flight1"></script>
+<script src="src/scenes/MenuScene.js?v=tutorial1"></script>
+<script src="src/scenes/CharacterSelectScene.js?v=flight1"></script>
+<script src="src/scenes/GameScene.js?v=flight1"></script>
+<script src="src/scenes/GameOverScene.js"></script>
+<script src="tools/enemy-preview.js"></script></html>

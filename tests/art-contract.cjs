@@ -20,7 +20,35 @@ for (const color of ['blue','green','red']) {
   const data = frames.map(frame => fs.readFileSync(path.join(root,frame.url)));
   assert.ok(!data[0].equals(data[1]), `${color} flap must use distinct images`);
 }
-const ids = ['plain', 'beach', 'forest', 'cave', 'nether', 'basalt'];
+const ids = ['plain', 'beach', 'forest', 'cave', 'nether', 'basalt', 'end', 'snow', 'blossom', 'wailing'];
+const biomeContext = vm.createContext({});
+for (const file of ['src/config/constants.js', 'src/config/biomes.js']) {
+  vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), biomeContext);
+}
+const biomes = vm.runInContext('BIOMES', biomeContext);
+assert.deepEqual(Array.from(biomes, b => b.id), ids, 'Biome cycle must follow the requested order');
+assert.deepEqual(Array.from(art.biomeIds), ids, 'Every playable biome must have art');
+assert.deepEqual(Array.from(biomes.slice(6), b => b.name), ['末地', '雪林', '花开尖塔', '哭嚎炼狱']);
+// Expanded biomes now have their own encounters; their assets and transition contract remain shared.
+for (const biome of biomes) assert.ok(biome.obstacleWeights && biome.duration > 0);
+// Exercise the existing gameplay transition, including the new last-to-first wrap.
+biomeContext.Phaser = {Scene:class {}};
+vm.runInContext(fs.readFileSync(path.join(root, 'src/scenes/GameScene.js'), 'utf8'), biomeContext);
+const updateBiome = vm.runInContext('GameScene.prototype.updateBiome', biomeContext);
+const visited = [], skins = [], titles = [];
+const transition = {
+  biomeIndex:5, biome:biomes[5], biomeTimer:0, transitioning:false,
+  cameras:{main:{fadeOut(){}, fadeIn(){}}},
+  time:{delayedCall(_delay, callback){callback();}},
+  game:{audioController:{setBiome(){}}},
+  bgManager:{applyBiome(biome){visited.push(biome.id);}},
+  entities:[{applyBiome(biome){skins.push(biome.id);}}],
+  showBiomeTitle(name){titles.push(name);},
+};
+for(let i=0; i<5; i++) updateBiome.call(transition, transition.biome.duration);
+assert.deepEqual(visited, ['end','snow','blossom','wailing','plain']);
+assert.deepEqual(skins, visited, 'Live obstacles must receive each biome during transitions');
+assert.deepEqual(titles, ['末地','雪林','花开尖塔','哭嚎炼狱','平原']);
 context.Phaser = {Scene:class {}};
 context.CHARACTERS = {blue:{},green:{},red:{}};
 vm.runInContext(fs.readFileSync(path.join(root,'src/scenes/BootScene.js'),'utf8')+'\nthis.boot = new BootScene();',context);
@@ -58,4 +86,4 @@ assert.equal(new Set(art.images.map(x => x.key)).size, art.images.length, 'Dupli
 assert.equal(art.ghastFrame(0.5, 0), 'tex_ghast_charge');
 assert.equal(art.ghastFrame(1.0, 0.12), 'tex_ghast_fire');
 assert.equal(art.ghastFrame(1.0, 0), 'tex_ghast');
-console.log(`PASS: six biome mappings, ${art.images.length} texture keys, ${files.size} PNG files, ${(bytes/1024).toFixed(1)} KiB, ghast visual states`);
+console.log(`PASS: ten biome mappings, ${art.images.length} texture keys, ${files.size} PNG files, ${(bytes/1024).toFixed(1)} KiB, ghast visual states`);
