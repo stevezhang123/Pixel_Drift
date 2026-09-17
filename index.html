@@ -2,19 +2,22 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>像素飘流 · Pixel Glider</title>
 <link rel="icon" href="data:," />
 <link rel="stylesheet" href="src/style.css?v=tutorial1" />
 </head>
 <body>
 <div id="game-root"></div>
+<div id="mobile-controls" hidden>
+  <button id="mobile-dash" type="button" aria-label="向前冲刺"><span>冲刺 →</span><small id="mobile-dash-state">就绪</small></button>
+</div>
 <button id="tutorial-button" class="tutorial-button" type="button" aria-haspopup="dialog" hidden>新手教程</button>
 <dialog id="tutorial-dialog" aria-labelledby="tutorial-title">
   <section class="tutorial-panel">
     <p class="tutorial-eyebrow">第一次飞行</p>
     <h2 id="tutorial-title">三步学会像素飘流</h2>
-    <img src="assets/tutorial.svg" alt="点击或触摸上升，松开下落，按空格冲刺。冲刺能撞碎绿色藤蔓和敌人，但石墙与浮岛不可撞碎。">
+    <img src="assets/tutorial.svg" alt="点击或触摸上升，松开下落，电脑按空格、手机按底部按钮冲刺。冲刺能撞碎绿色藤蔓和敌人，但石墙与浮岛不可撞碎。">
     <button id="tutorial-close" type="button">明白了，返回主界面</button>
   </section>
 </dialog>
@@ -97,6 +100,7 @@
 <script src="src/systems/AudioController.js?v=audio1"></script>
 <script src="src/ui/SettingsUI.js?v=audio2"></script>
 <script src="src/ui/TutorialUI.js?v=tutorial1"></script>
+<script src="src/ui/MobileControls.js"></script>
 <script src="src/scenes/BootScene.js?v=flight1"></script>
 <script src="src/scenes/MenuScene.js?v=tutorial1"></script>
 <script src="src/scenes/CharacterSelectScene.js?v=flight1"></script>

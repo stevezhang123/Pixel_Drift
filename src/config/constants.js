@@ -42,7 +42,7 @@ const TUNING = {
     cooldown: 0.3,            // 冷却时间（秒）
     duration: 0.32,           // 冲刺持续时间（秒）
     speedMultiplier: 2.6,     // 冲刺期间卷轴速度倍率
-    forwardOffset: 46,        // 冲刺时飞行器向右位移（视觉反馈）
+    forwardOffset: 150,       // 本体冲刺距离；碰撞箱随角色一同前移
   },
 
   /* ---------- 生成系统 ---------- */

@@ -66,6 +66,8 @@ class GameScene extends Phaser.Scene {
 
     /* ---- 输入 ---- */
     this.setupInput();
+    this.game.mobileControls.bind(this);
+    this.events.once('shutdown', () => this.game.mobileControls.unbind(this));
 
     /* ---- 开场 ---- */
     this.cameras.main.fadeIn(400);
@@ -115,25 +117,24 @@ class GameScene extends Phaser.Scene {
   }
 
   tryDash() {
-    if (this.dashCooldown > 0 || this.dashLockTimer > 0) return;
+    if (this.paused || this.state !== 'playing' || this.transitioning
+      || this.dashTimer > 0 || this.dashCooldown > 0 || this.dashLockTimer > 0) return;
 
     const d = TUNING.dash;
     this.dashTimer = d.duration;
     this.dashCooldown = d.cooldown * this.charCfg.dashCdMul;
+    this.dashStartX = this.playerX;
+    this.dashStartY = this.playerY;
+    this.dashTrailTimer = 0;
+    this.vy = 0;
     this.game.audioController.playSfx('dash');
+  }
 
-    for (let i = 0; i < 5; i++) {
-      const ghost = this.add.image(this.playerX, this.playerY, `tex_player_${this.charKey}_0`)
-        .setScale(1.6 * ArtAssets.playerScale).setTint(0x9fe8ff).setAlpha(0.55).setDepth(18);
-      this.tweens.add({
-        targets: ghost,
-        x: this.playerX + 90 + i * 24,
-        alpha: 0,
-        duration: 320,
-        delay: i * 35,
-        onComplete: () => ghost.destroy(),
-      });
-    }
+  spawnDashTrail() {
+    const ghost = this.add.image(this.playerX, this.playerY, this.playerSprite.texture.key)
+      .setScale(1.6 * ArtAssets.playerScale).setTint(0x9fe8ff).setAlpha(0.35).setDepth(18);
+    // The trail stays behind; only the real player moves and collides.
+    this.tweens.add({targets: ghost, alpha: 0, duration: 180, onComplete: () => ghost.destroy()});
   }
 
   /* ---------------------------------------------------------------------
@@ -184,50 +185,51 @@ class GameScene extends Phaser.Scene {
     const f = TUNING.flight;
     const c = this.charCfg;
 
-    /* --- 风力：垂直方向正弦扰动 --- */
-    this.windTime += dt;
-    const wind = Math.sin(this.windTime * f.windFrequency * Math.PI * 2) * f.windStrength;
+    if (this.dashTimer > 0) {
+      this.dashTrailTimer -= dt;
+      if (this.dashTrailTimer <= 0) {
+        this.spawnDashTrail();
+        this.dashTrailTimer = 0.05;
+      }
+      const progress = Math.min(1, (TUNING.dash.duration - this.dashTimer + dt) / TUNING.dash.duration);
+      this.playerX = this.dashStartX + (PLAYER_X + TUNING.dash.forwardOffset - this.dashStartX) * progress;
+      this.playerY = this.dashStartY;
+      this.vy = 0;
+    } else {
 
-    /* --- 重力 --- */
-    this.vy += f.gravity * c.gravityMul * dt;
+      /* --- 风力：垂直方向正弦扰动 --- */
+      this.windTime += dt;
+      const wind = Math.sin(this.windTime * f.windFrequency * Math.PI * 2) * f.windStrength;
 
-    /* --- 风力 --- */
-    this.vy += wind * dt;
+      /* --- 重力与风力 --- */
+      this.vy += f.gravity * c.gravityMul * dt;
+      this.vy += wind * dt;
 
-    /* --- 空气阻尼（风筝手感：保留惯性，滑翔更久）--- */
-    this.vy *= Math.pow(f.airDamp, dt * 60);
+      /* --- 空气阻尼、限速与位置积分 --- */
+      this.vy *= Math.pow(f.airDamp, dt * 60);
+      this.vy = Phaser.Math.Clamp(this.vy, -f.maxUpSpeed, f.maxDownSpeed);
+      this.playerY += this.vy * dt;
 
-    /* --- 限速 --- */
-    this.vy = Phaser.Math.Clamp(this.vy, -f.maxUpSpeed, f.maxDownSpeed);
+      /* --- 顶部边界（封顶群系触碰视为碰撞） --- */
+      const topY = 30;
+      if (this.playerY < topY) {
+        this.playerY = topY;
+        this.vy = Math.max(this.vy, 0);
+        if (this.biome.capped) this.damagePlayer();
+      }
 
-    /* --- 积分位置 --- */
-    this.playerY += this.vy * dt;
+      /* --- 底部：撞地扣血并弹起 --- */
+      if (this.playerY > GROUND_Y - 14) {
+        this.playerY = GROUND_Y - 14;
+        this.vy = -280;
+        this.damagePlayer();
+      }
 
-    /* --- 顶部边界（封顶群系触碰视为碰撞） --- */
-    const topY = 30;
-    if (this.playerY < topY) {
-      this.playerY = topY;
-      this.vy = Math.max(this.vy, 0);
-      if (this.biome.capped) this.damagePlayer();
+      // Smoothly return to the normal flight column after the dash.
+      this.playerX = Phaser.Math.Linear(this.playerX, PLAYER_X, Math.min(1, dt * 9));
     }
-
-    /* --- 底部：撞地扣血并弹起 --- */
-    if (this.playerY > GROUND_Y - 14) {
-      this.playerY = GROUND_Y - 14;
-      this.vy = -280;
-      this.damagePlayer();
-    }
-
-    /* --- 冲刺计时 --- */
     this.updateDashLock(dt);
-    if (this.dashTimer > 0)    this.dashTimer    -= dt;
-    if (this.dashCooldown > 0) this.dashCooldown -= dt;
-
-    /* --- 冲刺时向右位移（视觉反馈）--- */
-    const targetX = this.dashTimer > 0
-      ? PLAYER_X + TUNING.dash.forwardOffset
-      : PLAYER_X;
-    this.playerX = Phaser.Math.Linear(this.playerX, targetX, Math.min(1, dt * 9));
+    this.dashCooldown = Math.max(0, this.dashCooldown - dt);
 
     /* --- 同步精灵 --- */
     this.playerSprite.setPosition(this.playerX, this.playerY);
@@ -601,7 +603,7 @@ class GameScene extends Phaser.Scene {
     if (this.dashLockTimer > 0) {
       this.dashBar.setFillStyle(0xb4a17c);
       this.dashLabel.setText('粘液禁冲刺 ' + this.dashLockTimer.toFixed(1) + '秒');
-    } else this.dashLabel.setText('冲刺 [空格]');
+    } else this.dashLabel.setText(this.game.mobileControls.touchDevice ? '冲刺 [底部按钮]' : '冲刺 [空格]');
   }
 
   createPauseOverlay() {
@@ -651,6 +653,8 @@ class GameScene extends Phaser.Scene {
     this.updateEntities(dt);
     this.checkCollisions();
     this.cleanupEntities();
+    // Keep the whole last dash movement frame destructive, then expire the timer.
+    this.dashTimer = Math.max(0, this.dashTimer - dt);
     this.updateUI();
   }
 }
